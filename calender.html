@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <title>Calendar with Events</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .calendar {
+      width: 300px;
+      margin: 50px auto;
+    }
+
+    .month {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+    }
+
+    .day {
+      padding: 10px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    .day:hover {
+      background-color: skyblue;
+    }
+
+    .event-tooltip {
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 5px;
+      border-radius: 5px;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body style="background-color:rgb(241, 229, 229)">
+  <div class="container-fluid px-50" style="background-color: grey; font-size:40px;color:white ; text-align:center">
+    <img style="width:60px; height:60px"
+        src="https://th.bing.com/th/id/R.37f8d00f7e6a9dc7008da12555de1866?rik=76zIOhfqu9vzRA&riu=http%3a%2f%2fcmrcet.ac.in%2fwp-content%2fthemes%2fcmr%2fimg%2fcmrlogo.jpg&ehk=zskvxoq5vfjN7DDR3255I1NjkRLTM4VDp6qNs1CNj%2bg%3d&risl=&pid=ImgRaw&r=0">
+    <a class="navbar-brand" href="#">COLLEGE DASHBOARD</a>
+</div>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/about.html">About</a>
+                </li>
+
+                <a class="nav-link" href="#">Contact Us</a>
+                </li>
+
+
+            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+               <a href="login.html"> <button type="button" class="btn btn-outline-primary" style="width:300px ;margin-left:5px">Members
+                    login</button></a>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="calendar">
+  <div class="month">February 2024</div>
+  <div class="days" id="calendar"></div>
+</div>
+
+<div class="event-tooltip" id="eventTooltip" style="display: none;"></div>
+
+<script>
+  const calendarContainer = document.getElementById('calendar');
+  const eventTooltip = document.getElementById('eventTooltip');
+
+  // Sample events data
+  const events = {
+    '2024-02-15': 'Web wars',
+    '2024-02-20': 'HackFest',
+    '2024-02-25': 'Azura'
+  };
+
+  // Get the number of days in a month
+  function getDaysInMonth(month, year) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+
+  // Create the calendar
+  function createCalendar() {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth();
+
+    const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(currentYear, currentMonth, day);
+      const dateString = date.toISOString().split('T')[0];
+
+      const dayElement = document.createElement('div');
+      dayElement.classList.add('day');
+      dayElement.textContent = day;
+      dayElement.setAttribute('data-date', dateString);
+
+      if (events[dateString]) {
+        dayElement.classList.add('has-event');
+      }
+
+      dayElement.addEventListener('mouseover', function(event) {
+        const targetDate = event.target.getAttribute('data-date');
+        if (events[targetDate]) {
+          eventTooltip.textContent = events[targetDate];
+          eventTooltip.style.top = (event.pageY + 10) + 'px';
+          eventTooltip.style.left = (event.pageX + 10) + 'px';
+          eventTooltip.style.display = 'block';
+        }
+      });
+
+      dayElement.addEventListener('mouseout', function() {
+        eventTooltip.style.display = 'none';
+      });
+
+      calendarContainer.appendChild(dayElement);
+    }
+  }
+
+  createCalendar();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+crossorigin="anonymous"></script>
+</body>
+</html>
